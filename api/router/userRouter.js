@@ -32,7 +32,7 @@ userRouter.post("/login", async (req, res, next) => {
       });
     } else {
       res.json({
-        status: "success",
+        status: "Error",
         message: "User Not Found Please check your email and password",
       });
     }
