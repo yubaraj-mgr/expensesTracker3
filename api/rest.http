@@ -17,3 +17,24 @@ Content-Type: application/json
     "email": "yubaraj.100mgr@gmail.com",
     "password": "ljksdfl"
 }
+
+###
+POST http://localhost:8000/api/v1/dashboard
+Content-Type: application/json
+
+{
+    "transactionName": "Uber",
+    "amount": 1000,
+    "type": "income"
+}
+
+###
+DELETE  http://localhost:8000/api/v1/dashboard
+Content-Type: application/json
+
+{
+    "_id":["62dfe5568da1c6e7bfef6aa9"]
+}
+
+###
+GET  http://localhost:8000/api/v1/dashboard

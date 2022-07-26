@@ -19,11 +19,10 @@ const Login = () => {
       email,
       password,
     });
+    toast[status](message);
     if (status === "success") {
-      toast[status](message);
+      window.localStorage.setItem("User", JSON.stringify(response));
       naviGate("/dashboard");
-    } else {
-      toast.error("Please Check login Details");
     }
   };
   return (
