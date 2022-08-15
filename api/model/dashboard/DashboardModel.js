@@ -4,8 +4,8 @@ export const insertTransactions = (data) => {
   return DashboardSchema(data).save();
 };
 
-export const fetchAllTransactions = () => {
-  return DashboardSchema.find();
+export const fetchAllTransactions = (filter) => {
+  return DashboardSchema.find(filter);
 };
 
 export const deleteTransactions = (ids) => {

@@ -7,3 +7,6 @@ export const insertUserDetails = (data) => {
 export const checkIfWeHaveUser = (email) => {
   return UserSchema.findOne(email);
 };
+export const findOneAndUpdateUserAdmin = (filter, update) => {
+  return UserSchema.findOneAndUpdate(filter, update, { new: true });
+};

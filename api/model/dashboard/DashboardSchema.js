@@ -13,6 +13,10 @@ const DashboardSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  userId: {
+    type: String,
+    require: true,
+  },
 });
 
 export default mongoose.model("TransactionDetails", DashboardSchema);

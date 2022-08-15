@@ -17,14 +17,19 @@ const TransactionForm = ({ fetchAllDataFromServer }) => {
   };
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    const { status } = await insertTransactionsDetailsToServer(
-      transactionsDeatils
-    );
-    status === "success" && fetchAllDataFromServer();
+    const { _id } = JSON.parse(window.localStorage.getItem("User"));
+
+    const { status } = await insertTransactionsDetailsToServer({
+      ...transactionsDeatils,
+      userId: _id,
+    });
+    if (status === "success") {
+      fetchAllDataFromServer();
+    }
   };
   return (
     <Form className="mt-4" onSubmit={handleOnSubmit}>
-      <h4>Add Transaction</h4>
+      <h4>Add Transaction Hello</h4>
       <Row className="g-2">
         <Col md="2">
           <Form.Control

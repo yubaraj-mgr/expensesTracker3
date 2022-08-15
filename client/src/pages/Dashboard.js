@@ -4,14 +4,22 @@ import TransactionForm from "../component/TransactionForm";
 import TransactionTable from "../component/TransactionTable";
 import { fetchAllDataFromTransactinServer } from "../helper/axiosHelper";
 
+import { useNavigate } from "react-router-dom";
+
 const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
+  const naviGate = useNavigate();
   useEffect(() => {
     fetchAllDataFromServer();
   }, []);
   const fetchAllDataFromServer = async () => {
     const { status, response } = await fetchAllDataFromTransactinServer();
     status === "success" && setTransactions(response);
+  };
+
+  const handleOnLogout = () => {
+    const User = window.localStorage.removeItem("User");
+    naviGate("/login");
   };
   return (
     <MainLayout>
@@ -20,6 +28,7 @@ const Dashboard = () => {
         transactions={transactions}
         fetchAllDataFromServer={fetchAllDataFromServer}
       />
+      <button onClick={handleOnLogout}>Logout</button>
     </MainLayout>
   );
 };

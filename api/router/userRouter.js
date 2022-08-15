@@ -1,4 +1,9 @@
 import express from "express";
+import { bcryptPassword } from "../helpers/bcrypt.js";
+import {
+  addAdminToDatabase,
+  emailVerificationValidation,
+} from "../middleware/JoiMiddleWare/adminUserJoiMiddleWare.js";
 import {
   deleteTransactions,
   fetchAllTransactions,
@@ -6,23 +11,54 @@ import {
 } from "../model/dashboard/DashboardModel.js";
 import {
   checkIfWeHaveUser,
+  findOneAndUpdateUserAdmin,
   insertUserDetails,
 } from "../model/user/Usermodel.js";
+import { v4 as uuidv4 } from "uuid";
+import { sendemail } from "../helpers/nodeMailer.js";
 
 const userRouter = express.Router();
 
-userRouter.post("/", async (req, res, next) => {
+userRouter.post("/", addAdminToDatabase, async (req, res, next) => {
   try {
+    const { password } = req.body;
+    const hashPassword = bcryptPassword(password);
+    req.body.password = hashPassword;
+    req.body.emailCode = uuidv4();
     const response = await insertUserDetails(req.body);
-    res.json({
-      status: "success",
-      message: "User Added Successfully",
-      response,
-    });
+    const url = `http://localhost:3000/api/v1/verify?c=${response.emailCode}&e=${response.email}`;
+    if (response?._id) {
+      res.json({
+        status: "success",
+        message: "User Added Successfully",
+        response,
+      });
+      sendemail({
+        fName: response.firstName,
+        email: response.email,
+        url,
+      });
+    }
+    return;
   } catch (error) {
     error && console.log(error);
   }
 });
+
+userRouter.patch(
+  "/verify",
+  emailVerificationValidation,
+  async (req, res, next) => {
+    try {
+      const result = await findOneAndUpdateUserAdmin(req.body, {
+        status: "active",
+        emailCode: "",
+      });
+    } catch (error) {
+      error && console.log(error);
+    }
+  }
+);
 
 userRouter.post("/login", async (req, res, next) => {
   try {
@@ -61,7 +97,13 @@ userRouter.post("/dashboard", async (req, res, next) => {
 
 userRouter.get("/dashboard", async (req, res, next) => {
   try {
-    const response = await fetchAllTransactions();
+    const { authorization } = req.headers;
+    console.log(authorization);
+    const filter = {
+      // userId is a keyword
+      userId: authorization,
+    };
+    const response = await fetchAllTransactions(filter);
     res.json({
       status: "success",
       message: "User Added Successfully",

@@ -3,11 +3,14 @@ POST http://localhost:8000/api/v1
 Content-Type: application/json
 
 {
-    "firstName": "Yubaraj",
-    "lastName": "Magar",
-    "email": "yubaraj.100mgr@gmail.com",
-    "password": "jflasjflsajdflksa"
+    "firstName": "Rai",
+    "lastName": "gurung",
+    "email": "divya.10sa30mgr@gmail.com",
+    "password": "2dsfsad"
 }
+
+###
+PATCH  http://localhost:8000/api/v1/verify
 
 ###
 POST http://localhost:8000/api/v1/login
@@ -38,3 +41,4 @@ Content-Type: application/json
 
 ###
 GET  http://localhost:8000/api/v1/dashboard
+authorization: 62e6a92f7d0ca0c743b555e5
